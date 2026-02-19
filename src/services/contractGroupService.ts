@@ -38,11 +38,13 @@ export class ContractGroupService {
      * Load groups from storage
      */
     public async loadGroups(): Promise<void> {
-        const stored = this.context.workspaceState.get<Record<string, ContractGroup>>(this.storageKey);
+        const stored = this.context.workspaceState.get<Record<string, ContractGroup> | undefined>(this.storageKey);
         if (stored) {
             this.groups.clear();
             Object.entries(stored).forEach(([id, group]) => {
-                this.groups.set(id, group);
+                if (group) {
+                    this.groups.set(id, group as ContractGroup);
+                }
             });
         } else {
             this.initializeRootGroup();
@@ -120,7 +122,7 @@ export class ContractGroupService {
             throw new Error(`Group "${groupId}" not found`);
         }
 
-        const parent = this.getGroup(group.parentId) || this.getRootGroup();
+        const parent = (group.parentId ? this.getGroup(group.parentId) : null) || this.getRootGroup();
         parent.contractIds.push(...group.contractIds);
         parent.modifiedAt = Date.now();
 

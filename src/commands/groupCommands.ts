@@ -15,7 +15,7 @@ export function registerGroupCommands(context: vscode.ExtensionContext, groupSer
                 const name = await vscode.window.showInputBox({
                     prompt: 'Enter group name',
                     placeHolder: 'e.g., Payment Contracts',
-                    validateInput: (value) => {
+                    validateInput: (value: string) => {
                         const validation = groupService.validateGroupName(value);
                         return validation.error || '';
                     },
@@ -49,7 +49,7 @@ export function registerGroupCommands(context: vscode.ExtensionContext, groupSer
                 const newName = await vscode.window.showInputBox({
                     prompt: 'Enter new group name',
                     value: group.name,
-                    validateInput: (value) => {
+                    validateInput: (value: string) => {
                         const validation = groupService.validateGroupName(value);
                         return validation.error || '';
                     },
